@@ -1,0 +1,54 @@
+name: QA Smoke Tests
+on:
+  # push:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: 'Cypress test spec to use'
+        default: cypress/integration/STAX/Connect,cypress/integration/STAX/Engine,cypress/integration/STAX/PAY
+        type: string
+      QA_BUILD_ID:
+        description: 'Build ID'
+        required: true
+        type: string
+        default: 661c93c6
+      grepTags:
+        description: 'Add Tag to grep tests by'
+        type: string
+        default: grepTags=@SMOKE
+  schedule:
+    # At 01:00 AM , 06:00 PM Monday through Friday
+    - cron: '0 05 * * 1-5'
+jobs:
+  Stax-Smoke-QA:
+    runs-on: qa
+    strategy:
+      fail-fast: false # https://github.com/cypress-io/github-action/issues/48
+      matrix:
+        containers: [1, 2] # Uses 2 parallel instances
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
+      - name: Login to aws
+        id: login-aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::951658411413:role/GithubActions
+          role-duration-seconds: 1200
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+        # Uses the official Cypress GitHub action https://github.com/actions/setup-node
+      - name: Stax-Smoke run
+        uses: cypress-io/github-action@v5
+        with:
+          config-file: cypress.qa.config.js
+          browser: chrome
+          spec: ${{inputs.spec}}
+          record: true
+          tag: QA, SMOKE
+          env: ${{inputs.grepTags}}
+
+        
