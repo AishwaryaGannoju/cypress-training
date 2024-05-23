@@ -28,7 +28,7 @@
 
 Cypress.Commands.overwrite("clickLink", (label) => {
   cy.get("a").contains(label).click();
-  cy.log('Clicked the link')
+  cy.log("***change in branch1 ***")
 });
 
 Cypress.Commands.add("checkPresence", (label) => {
