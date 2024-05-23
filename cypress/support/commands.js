@@ -26,8 +26,9 @@
 
 //custom command for clicking on link using label and assestion to check that
 
-Cypress.Commands.add("clickLink", (label) => {
+Cypress.Commands.overwrite("clickLink", (label) => {
   cy.get("a").contains(label).click();
+  cy.log('Clicked the link')
 });
 
 Cypress.Commands.add("checkPresence", (label) => {
