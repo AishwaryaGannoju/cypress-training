@@ -28,6 +28,7 @@
 
 Cypress.Commands.add("clickLink", (label) => {
   cy.get("a").contains(label).click();
+  cy.log("***change in branch1 ***")
 });
 
 Cypress.Commands.add("checkPresence", (label) => {
