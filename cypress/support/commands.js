@@ -26,9 +26,10 @@
 
 //custom command for clicking on link using label and assestion to check that
 
-Cypress.Commands.overwrite("clickLink", (label) => {
+Cypress.Commands.add("clickLink", (label) => {
   cy.get("a").contains(label).click();
-  cy.log("***change in branch1 ***")
+  cy.log('click the link')
+  cy.log("***change in b1 ***")
 });
 
 Cypress.Commands.add("checkPresence", (label) => {
